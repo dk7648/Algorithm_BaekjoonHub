@@ -21,15 +21,15 @@ class Solution
             int y = 0;
             arr[0][0] = 1;
 
-            while(n != 1) {
+            for (int i = 1; i < n * n; i++) {
                 int nx = x + dx[d];
                 int ny = y + dy[d];
-                if(nx < 0 || nx >= n || ny < 0 || ny >= n || arr[ny][nx] != 0) {
-                    d = (d+1)%4;
-                    continue;
+                if (ny < 0 || ny >= n || nx < 0 || nx >= n || arr[ny][nx] != 0) {
+                    d = (d + 1) % 4;
+                    nx = x + dx[d];
+                    ny = y + dy[d];
                 }
                 arr[ny][nx] = arr[y][x] + 1;
-                if(arr[ny][nx] == n*n) break;
                 x = nx;
                 y = ny;
             }
