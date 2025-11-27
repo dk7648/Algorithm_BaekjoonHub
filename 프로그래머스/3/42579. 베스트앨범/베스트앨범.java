@@ -6,28 +6,25 @@ class Solution {
         for(int i=0; i<n; i++) {
             map.put(genres[i], map.getOrDefault(genres[i], 0) + plays[i]);
         }
-        List<Map.Entry<String, Integer>> sortedGenres = new LinkedList<>(map.entrySet());
-        sortedGenres.sort((o1, o2) -> o2.getValue().compareTo(o1.getValue())); //play순으로 장르 정렬
         
         Map<Integer, Integer> map2 = new HashMap<>();
         for(int i=0; i<n; i++) {
             map2.put(i, plays[i]);
         }
-        List<Map.Entry<Integer, Integer>> sortedIndexes = new LinkedList<>(map2.entrySet());
-        sortedIndexes.sort((o1, o2) -> o2.getValue().compareTo(o1.getValue())); //play순으로 고유번호 정렬
         
         List<Integer> result = new LinkedList<>();
-        for (Map.Entry<String, Integer> e : sortedGenres) {
-            List<Integer> t = new LinkedList<>();
-            String key = String.valueOf(e.getKey());
+        List<String> sortedGenres = sortedByValue(map);
+        List<Integer> sortedIndexes = sortedByValue(map2);
+        
+        for (String key : sortedGenres) {
+            int count = 0;
             for(int i=0; i<n; i++) {
-                int index = sortedIndexes.get(i).getKey();
-                if(genres[index].equals(key) && t.size() < 2) {
-                    t.add(index);
+                int index = sortedIndexes.get(i);
+                if(genres[index].equals(key)) {
+                    result.add(index);
+                    count++;
                 }
-            }
-            for(int index : t) {
-                result.add(index);
+                if(count >= 2) break;
             }
         }
 
@@ -36,5 +33,17 @@ class Solution {
             answer[i] = result.get(i);
         }
         return answer;
+    }
+    
+    public ArrayList sortedByValue(final Map map) {
+        ArrayList<Object> list = new ArrayList<>();
+        list.addAll(map.keySet());
+        
+        list.sort((o1, o2) -> {
+            Object v1 = map.get(o1);
+            Object v2 = map.get(o2);
+            return ((Comparable) v2).compareTo(v1);
+        });
+        return list;
     }
 }
